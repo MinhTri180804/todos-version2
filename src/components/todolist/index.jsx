@@ -1,44 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Todo from "./todo";
+import { list } from "postcss";
 
-TodoList.propTypes = {};
+TodoList.propTypes = {
+  todoList: PropTypes.array,
+};
+
+TodoList.defaultProps = {
+  todoList: [],
+}
 
 function TodoList(props) {
+  const { todoList } = props;
   const root = document.getElementById("root");
-  let todoList = [
-    {
-      id: 0,
-      title: "Get up at 6am",
-      time: "12:00",
-      date: "03/09/2023",
-      description: "",
-    },
-
-    {
-      id: 1,
-      title: "Completed task managers",
-      time: "11:00",
-      date: "03/09/2023",
-      description: "",
-    },
-
-    {
-      id: 2,
-      title: "Play soccer in afternoon",
-      time: "17:20",
-      date: "03/09/2023",
-      description: "",
-    },
-
-    {
-      id: 3,
-      title: "Go to school",
-      time: "09:00",
-      date: "05/09/2023",
-      description: "",
-    },
-  ];
 
   function handleClickTodo(id) {
     const todo = todoList.find((todo) => {
@@ -93,6 +68,42 @@ function TodoList(props) {
     });
   }
 
+  let timer;
+  const listTodo = document.querySelectorAll("li.todo");
+  listTodo.forEach((todo) => {
+    todo.addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      timer = setTimeout(() => {
+        listTodo.forEach((todoBlur) => {
+          todoBlur.style.filter = "blur(2px)";
+          todoBlur.style.zIndex = "0.5";
+          todoBlur.classList.remove('active');
+        });
+        todo.classList.add('active');
+      }, 300);
+
+      todo.addEventListener("touchstart", function () {
+        todo.classList.remove('active');
+        listTodo.forEach((todoBlur) => {
+          todoBlur.style.filter = "blur(0px)";
+          todoBlur.classList.remove('active');
+        });
+      });
+    });
+
+    todo.addEventListener("touchend", function () {
+      clearTimeout(timer);
+    });
+
+    const outTodo = document.querySelector(".list__todo");
+    outTodo.addEventListener('click', () => {
+      listTodo.forEach((todoBlur) => {
+        todoBlur.style.filter = "blur(0px)";
+        todoBlur.classList.remove('active');
+      });
+    })
+  });
+  
   return (
     <section className="todo_list">
       <h3 className="title_todoList text-6xl text-black text-left">To-Dos</h3>

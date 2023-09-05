@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Long Press Event</title>
+</head>
+<body>
+    <div id="myElement">Nhấn và giữ tôi</div>
+
+    <script>
+        var element = document.getElementById("myElement");
+        var timer;
+
+        element.addEventListener("mousedown", function () {
+            timer = setTimeout(function () {
+                // Xử lý sự kiện khi nhấn giữ được kích hoạt
+                console.log("Sự kiện nhấn giữ đã được kích hoạt");
+            }, 1000); // Thời gian tối thiểu để coi là long press (ở đây là 1 giây)
+        });
+
+        element.addEventListener("mouseup", function () {
+            clearTimeout(timer);
+        });
+
+        element.addEventListener("touchstart", function (event) {
+            event.preventDefault(); // Ngăn chặn sự kiện touch mặc định
+            timer = setTimeout(function () {
+                // Xử lý sự kiện khi nhấn giữ được kích hoạt trên thiết bị cảm ứng
+                console.log("Sự kiện nhấn giữ đã được kích hoạt 2");
+            }, 1000); // Thời gian tối thiểu để coi là long press (ở đây là 1 giây)
+        });
+
+        element.addEventListener("touchend", function () {
+            clearTimeout(timer);
+        });
+    </script>
+</body>
+</html>
